@@ -1,4 +1,4 @@
-# Vert.x, OpenJDK, Apache, and MySQL Server on Ubuntu VM
+# IBM MQ Server on Ubuntu VM
 
 [![Deploy](https://raw.githubusercontent.com/Kushalgopal/AzureARM_M02/master/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FKushalgopal%2FAzureARM_M02%2Fmaster%2Fazuredeploy.json)
 
