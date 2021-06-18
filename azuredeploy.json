@@ -302,9 +302,7 @@
           "typeHandlerVersion": "2.0",
           "autoUpgradeMinorVersion": true,
           "settings": {
-            "fileUris": [
-              "[uri(parameters('_artifactsLocation'), concat('Scripts/mqm_install_ubuntu.sh', parameters('_artifactsLocationSasToken')))]"
-            ],
+            "fileUris": ["https://raw.githubusercontent.com/Kushalgopal/AzureARM_M02/master/Scripts/mqm_install_ubuntu.sh"],
             "commandToExecute": "sh mqm_install_ubuntu.sh"
           }
         }
