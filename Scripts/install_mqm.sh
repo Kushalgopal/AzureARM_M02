@@ -153,7 +153,8 @@ sudo adduser ${SUDO_USER:-${USER}} mqm
 echo "Successfully added ${SUDO_USER:-${USER}} to group mqm"
 
 
-
+export PATH=$PATH:/opt/mqm/bin
+# Add command which will allow user create permissions 
 exec sudo -u ${SUDO_USER:-${USER}} /bin/bash - << eof
 cd /opt/mqm/bin
 . setmqenv -s
@@ -175,66 +176,3 @@ else
     echo "Problem when creating a queue manager. See return code: " $returnCode
     exit $returnCode
 fi
-strmqm QM1
-returnCode=$?
-if [ $returnCode -eq 0 ]
-then
-    echo "Successfully started a queue manager" 
-else
-    echo "Problem when starting a queue manager. See return code: " $returnCode
-    exit $returnCode
-fi
-# Download and run developer config file to create MQ objects
-mkdir ~/Downloads
-cd ~/Downloads
-wget mq-dev-config.mqsc https://raw.githubusercontent.com/ibm-messaging/mq-dev-samples/master/gettingStarted/mqsc/mq-dev-config.mqsc 
-returnCode=$?
-if [ $returnCode -eq 0 ]
-then
-    echo "MQSC script successfully downloaded"
-else
-    echo "MQSC script download failed. See return code: " $returnCode
-    exit $returnCode
-fi
-# Set up MQ environment from .mqsc script
-runmqsc QM1 < mq-dev-config.mqsc
-returnCode=$?
-if [ $returnCode -eq 20 ]
-then
-    echo "error code $?"
-    echo "Error running MQSC script!"
-    exit $returnCode
-else
-    echo "Developer configuration set up"
-fi
-# Set up authentication for members of the "mqclient" group
-setmqaut -m QM1 -t qmgr -g mqclient +connect +inq
-returnCode=$?
-if [ $returnCode -ne 0 ]
-then
-    echo "Authorisation failed. See return code: " $returnCode
-    exit $returnCode
-fi
-setmqaut -m QM1 -n DEV.** -t queue -g mqclient +put +get +browse +inq
-returnCode=$?
-if [ $returnCode -eq 0 ]
-then
-    echo "Authorisation succeeded."
-else
-    echo "Authorisation failed. See return code: " $returnCode
-    exit $returnCode
-fi
-echo 
-echo "Now everything is set up with the developer configuration."
-echo "For details on environment variables that must be created and a simple put/get test, visit" 
-echo "https://developer.ibm.com/tutorials/mq-connect-app-queue-manager-ubuntu/"
-echo
-eof
-exit 0
-
-# Set environment for default user
-
-. /opt/mqm/bin/setmqenv -s
-
-export MQSERVER='DEV.APP.SVRCONN/TCP/localhost(1414)'
-export MQSAMP_USER_ID='app'
