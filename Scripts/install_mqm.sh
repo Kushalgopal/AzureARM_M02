@@ -155,7 +155,7 @@ echo "Successfully added ${SUDO_USER:-${USER}} to group mqm"
 
 export PATH=$PATH:/opt/mqm/bin
 # Add command which will allow user create permissions 
-exec sudo su ${SUDO_USER:-${USER}} /bin/bash - << eof
+exec sudo -u ${SUDO_USER:-${USER}} /bin/bash - << eof
 cd /opt/mqm/bin
 . setmqenv -s
 returnCode=$?
