@@ -78,9 +78,14 @@
       },
       "vmSize":{
         "type":"string",
-        "defaultValue": "Standard_A2",
+        "defaultValue": "Standard_B2ms",
+        "allowedValues": [
+          "Standard_B2ms",
+          "Standard_B4ms",
+          "Standard_B8ms"
+        ],
         "metadata": {
-          "description": "Default VM size"
+          "description": "Default VM size is B2_ms. The values can be choosen between B2_ms, B4_ms, B8_ms, for 2vCPU, 4vCPU and 8vCPU respectively."
         }
       }
     },
