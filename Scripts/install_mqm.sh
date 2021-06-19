@@ -167,7 +167,7 @@ else
     exit $?
 fi
 # Create and start a queue manager
-sudo su mq_admin | export PATH=$PATH:/opt/mqm/bin
+sudo su ${SUDO_USER:-${USER}} | export PATH=$PATH:/opt/mqm/bin
 /opt/mqm/bin/crtmqm QM1
 #returnCode=$?
 if [ $? -eq 0 ]
