@@ -155,11 +155,11 @@ echo "Successfully added ${SUDO_USER:-${USER}} to group mqm"
 
 export PATH=$PATH:/opt/mqm/bin
 # Add command which will allow user create permissions 
-exec sudo -u ${SUDO_USER:-${USER}} /bin/bash - << eof
+exec sudo su ${SUDO_USER:-${USER}} /bin/bash - << eof
 cd /opt/mqm/bin
 . setmqenv -s
 returnCode=$?
-if [ $returnCode -eq 0 ]
+if [ "$returnCode" -eq 0 ]
 then
     echo "MQ environment set"
 else
@@ -167,12 +167,15 @@ else
     exit $returnCode
 fi
 # Create and start a queue manager
-crtmqm QM1
+sudo su mq_admin | export PATH=$PATH:/opt/mqm/bin
+/opt/mqm/bin/crtmqm QM1
 returnCode=$?
-if [ $returnCode -eq 0 ]
+if [ "$returnCode" -eq 0 ]
 then
     echo "Successfully created a queue manager" 
 else
     echo "Problem when creating a queue manager. See return code: " $returnCode
     exit $returnCode
 fi
+eof
+exit 0
