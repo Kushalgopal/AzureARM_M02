@@ -6,4 +6,4 @@ This template uses the Azure Linux CustomScript extension to deploy IBM MQ Serve
 
 It downloads pre-reuisites and respective installation files from the location you specify. It also installs IBM MQ Server in non-interactive mode.
 
-All these parameters may be edited in install.sh script.
+All these parameters may be edited in install_mqm.sh script.
