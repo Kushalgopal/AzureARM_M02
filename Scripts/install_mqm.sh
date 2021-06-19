@@ -166,8 +166,11 @@ else
     echo "MQ environment not set. See return code: " $?
     exit $?
 fi
+
 # Create and start a queue manager
-sudo su ${SUDO_USER:-${USER}} | export PATH=$PATH:/opt/mqm/bin
+cd /opt/mqm/bin
+sudo su ${SUDO_USER:-${USER}}
+export PATH=$PATH:/opt/mqm/bin
 /opt/mqm/bin/crtmqm QM1
 #returnCode=$?
 if [ $? -eq 0 ]
@@ -177,5 +180,6 @@ else
     echo "Problem when creating a queue manager. See return code: " $?
     exit $?
 fi
+/opt/mqm/bin/dspmq
 eof
 exit 0
