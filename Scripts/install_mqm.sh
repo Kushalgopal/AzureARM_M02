@@ -46,28 +46,28 @@ groups app
 # Before we start the install and config, check that the user created the group "mqclient"
 
 getent group mqclient
-returnCode=$?
-if [ $returnCode -eq 0 ]
+#returnCode=$?
+if [ $? -eq 0 ]
 then
     echo "Group mqclient exists. Proceeding with install."
     echo
 else
     echo "Group mqclient does not exist!" 
     echo "Please visit https://developer.ibm.com/tutorials/mq-connect-app-queue-manager-ubuntu/ to learn how to create the required group."
-    exit $returnCode
+    exit $?
 fi
 
 # Download MQ Advanced from public repo
 cd ~
 wget -c https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/messaging/mqadv/mqadv_dev920_ubuntu_x86-64.tar.gz
-returnCode=$?
-if [ $returnCode -eq 0 ]
+#returnCode=$?
+if [ $? -eq 0 ]
 then 
     echo "Download complete"
     echo
 else
-    echo "wget failed. See return code: " $returnCode
-    exit $returnCode
+    echo "wget failed. See return code: " $?
+    exit $?
 fi
 
 # Unzip and extract .tar.gz file
@@ -75,28 +75,28 @@ gunzip mqadv_dev920_ubuntu_x86-64.tar.gz
 echo ".gz extract complete"
 echo
 tar -xf ./mqadv_dev920_ubuntu_x86-64.tar
-returnCode=$?
-if [ $returnCode -eq 0 ]
+#returnCode=$?
+if [ $? -eq 0 ]
 then 
     echo "File extraction complete"
     echo
 else
-    echo "File extraction failed. See return code: " $returnCode
-    exit $returnCode
+    echo "File extraction failed. See return code: " $?
+    exit $?
 fi
 
 # Accept the license
 cd MQServer
 # sudo chmod +x MQServer/*.sh
 sudo ./mqlicense.sh -accept
-returnCode=$?
-if [ $returnCode -eq 0 ]
+#returnCode=$?
+if [ $? -eq 0 ]
 then
     echo "license accepted"
     echo
 else
     echo "license not accepted"
-    exit $returnCode
+    exit $?
 fi
 
 # Create a .list file to let the system add the new packages to the apt cache
@@ -106,44 +106,44 @@ MQ_PACKAGES_LOCATION="/var/tmp/MQServer_Packages"
 echo "deb [trusted=yes] file:$MQ_PACKAGES_LOCATION ./" > mq-install.list
 sudo mv ~/mq-install.list /etc/apt/sources.list.d/
 sudo apt update
-returnCode=$?
-if [ $returnCode -eq 0 ]
+#returnCode=$?
+if [ $? -eq 0 ]
 then
     echo "apt cache update succeeded."
     echo
 else
-    echo "apt cache update failed! See return code: " $returnCode
-    exit $returnCode
+    echo "apt cache update failed! See return code: " $?
+    exit $?
 fi
 
 echo "Beginning MQ install"
 sudo apt install -y "ibmmq-*"
-returnCode=$?
-if [ $returnCode -eq 0 ]
+#returnCode=$?
+if [ $? -eq 0 ]
 then
     echo "Install succeeded."
 else
-    echo "Install failed. See return code: " $returnCode
-    exit $returnCode
+    echo "Install failed. See return code: " $?
+    exit $?
 fi
 
 echo "Checking MQ version"
 /opt/mqm/bin/dspmqver
-returnCode=$?
-if [ $returnCode -ne 0 ]
+#returnCode=$?
+if [ $? -ne 0 ]
 then
-    echo "Error with dspmqver. See return code: " $returnCode
-    exit $returnCode
+    echo "Error with dspmqver. See return code: " $?
+    exit $?
 fi
 
 # Delete .list file and run apt update again to clear the apt cache
 sudo rm /etc/apt/sources.list.d/mq-install.list
 sudo apt-get update
-returnCode=$?
-if [ $returnCode -ne 0 ]
+#returnCode=$?
+if [ $? -ne 0 ]
 then
     echo "Could not delete .list file /etc/apt/sources.list.d/mq-install.list."
-    echo " See return code: " $returnCode
+    echo " See return code: " $?
 else
     echo "Successfully removed .list file"
 fi
@@ -158,24 +158,24 @@ export PATH=$PATH:/opt/mqm/bin
 exec sudo -u ${SUDO_USER:-${USER}} /bin/bash - << eof
 cd /opt/mqm/bin
 . setmqenv -s
-returnCode=$?
-if [ "$returnCode" -eq 0 ]
+#returnCode=$?
+if [ $? -eq 0 ]
 then
     echo "MQ environment set"
 else
-    echo "MQ environment not set. See return code: " $returnCode
-    exit $returnCode
+    echo "MQ environment not set. See return code: " $?
+    exit $?
 fi
 # Create and start a queue manager
 sudo su mq_admin | export PATH=$PATH:/opt/mqm/bin
 /opt/mqm/bin/crtmqm QM1
-returnCode=$?
-if [ "$returnCode" -eq 0 ]
+#returnCode=$?
+if [ $? -eq 0 ]
 then
     echo "Successfully created a queue manager" 
 else
-    echo "Problem when creating a queue manager. See return code: " $returnCode
-    exit $returnCode
+    echo "Problem when creating a queue manager. See return code: " $?
+    exit $?
 fi
 eof
 exit 0
